@@ -20,7 +20,8 @@
         "resourceClass": "m-medium"
       },
       "env": {
-        "EXPO_PUBLIC_DOMAIN": "lead-tracker-muratamac2179.replit.app"
+        "EXPO_PUBLIC_DOMAIN": "lead-tracker-muratamac2179.replit.app",
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "test_DPtvyjWYYFpSmFvrhZGqxCtXgyH"
       }
     }
   },
