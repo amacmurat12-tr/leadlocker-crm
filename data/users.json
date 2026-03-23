@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": "f845d545-2625-4da7-a400-d4c6a3a35667",
+      "email": "amacmurat12@gmail.com",
+      "username": "Murat Amac",
+      "passwordHash": "$2b$12$RItMg./xHHF3UAq32KaB2e6SHDVLASoXMzCcq44fsFj0ZNcGcgFvK",
+      "createdAt": 1772641648357
+    },
+    {
+      "id": "e8e73b8d-652c-4a14-ad42-0212d99be31b",
+      "email": "muratamac4479@gmail.com",
+      "username": "Amaç Murat",
+      "passwordHash": "$2b$12$OZ8nUcYTIK5k5K7CVWw0lOTE0mxI.szx8Uf7XzhgEYpEqTeAnud9K",
+      "createdAt": 1773522208112
+    },
+    {
+      "id": "19919dce-1a73-4e7a-9de9-0f9e9c064ffb",
+      "email": "muratamac2179@gmail.com",
+      "username": "Murat Amaç",
+      "passwordHash": "$2b$12$sosQWXEbUkgSXdaQjJHP5OhUDj908rzGhGB7e1XP1RyyD/kV4JWJO",
+      "createdAt": 1774266132790
+    }
+  ],
+  "resetTokens": []
+}
