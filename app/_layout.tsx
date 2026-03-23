@@ -9,6 +9,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
+import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -21,6 +22,14 @@ import PaywallModal from "@/components/PaywallModal";
 import { SplashAnimation } from "@/components/SplashAnimation";
 
 SplashScreen.preventAutoHideAsync();
+
+if (Platform.OS !== "web") {
+  const RC_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? "test_DPtvyjWYYFpSmFvrhZGqxCtXgyH";
+  import("react-native-purchases").then((mod) => {
+    const Purchases = mod.default;
+    Purchases.configure({ apiKey: RC_KEY });
+  }).catch(() => {});
+}
 
 function RootLayoutNav() {
   const { colors } = useTheme();
