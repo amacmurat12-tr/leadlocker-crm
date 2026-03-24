@@ -90,24 +90,45 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     if (Platform.OS !== "web") {
       try {
         const Purchases = (await import("react-native-purchases")).default;
-        const offerings = await Purchases.getOfferings();
-        const current = offerings.current;
-        if (current) {
-          const pkg =
-            selectedPlan === "monthly"
-              ? current.monthly
-              : current.annual;
-          if (pkg) {
-            const { customerInfo } = await Purchases.purchasePackage(pkg);
-            const hasActive = Object.keys(customerInfo.entitlements.active).length > 0;
-            if (hasActive) {
-              setIsSubscribed(true);
-              setPlan(selectedPlan);
-              await AsyncStorage.multiSet([[SUB_KEY, "true"], [SUB_PLAN_KEY, selectedPlan]]);
-              setPaywallVisible(false);
-              return;
+
+        // Try offering packages first
+        let purchased = false;
+        try {
+          const offerings = await Purchases.getOfferings();
+          const current = offerings.current;
+          if (current) {
+            const pkg = selectedPlan === "monthly" ? current.monthly : current.annual;
+            if (pkg) {
+              const { customerInfo } = await Purchases.purchasePackage(pkg);
+              if (Object.keys(customerInfo.entitlements.active).length > 0) {
+                purchased = true;
+              }
             }
           }
+        } catch (offeringErr: any) {
+          if (offeringErr?.userCancelled) return;
+        }
+
+        // Fallback: purchase directly by product ID
+        if (!purchased) {
+          const productId = selectedPlan === "monthly"
+            ? "leadlocker_monthly"
+            : "leadlocker_yearly";
+          const products = await Purchases.getProducts([productId]);
+          if (products.length > 0) {
+            const { customerInfo } = await Purchases.purchaseStoreProduct(products[0]);
+            if (Object.keys(customerInfo.entitlements.active).length > 0) {
+              purchased = true;
+            }
+          }
+        }
+
+        if (purchased) {
+          setIsSubscribed(true);
+          setPlan(selectedPlan);
+          await AsyncStorage.multiSet([[SUB_KEY, "true"], [SUB_PLAN_KEY, selectedPlan]]);
+          setPaywallVisible(false);
+          return;
         }
       } catch (e: any) {
         if (!e?.userCancelled) throw e;
