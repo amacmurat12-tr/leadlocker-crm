@@ -23,14 +23,6 @@ import { SplashAnimation } from "@/components/SplashAnimation";
 
 SplashScreen.preventAutoHideAsync();
 
-if (Platform.OS !== "web") {
-  const RC_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? "test_DPtvyjWYYFpSmFvrhZGqxCtXgyH";
-  import("react-native-purchases").then((mod) => {
-    const Purchases = mod.default;
-    Purchases.configure({ apiKey: RC_KEY });
-  }).catch(() => {});
-}
-
 function RootLayoutNav() {
   const { colors } = useTheme();
   const { user, isLoading } = useAuth();
@@ -90,6 +82,16 @@ function ThemedApp() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
+
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    const RC_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? "test_DPtvyjWYYFpSmFvrhZGqxCtXgyH";
+    import("react-native-purchases")
+      .then((mod) => {
+        mod.default.configure({ apiKey: RC_KEY });
+      })
+      .catch(() => {});
+  }, []);
 
   if (!fontsLoaded && !fontError) return null;
 
